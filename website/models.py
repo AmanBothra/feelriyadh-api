@@ -97,7 +97,7 @@ class BaseAmenities(models.Model):
         FileExtensionValidator(FileFieldConstants.IMAGE_FORMATS)])
 
     class Meta:
-        verbose_name = verbose_name_plural = _("Base Amenities")
+        verbose_name = verbose_name_plural = _("Amenities")
 
 
 class Amenities(models.Model):

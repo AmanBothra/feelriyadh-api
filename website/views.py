@@ -1,43 +1,37 @@
 from rest_framework.viewsets import ModelViewSet
-
+from rest_framework.generics import ListAPIView
 from . import models
 from . import serializers
 
 
-class BannerViewSet(ModelViewSet):
+class BannerViewSet(ListAPIView):
     queryset = models.Banner.objects.all()
     serializer_class = serializers.BannerSerializer
-    http_method_names = ['get']
 
 
-class AboutViewSet(ModelViewSet):
+class AboutViewSet(ListAPIView):
     queryset = models.About.objects.all()
     serializer_class = serializers.AboutSerializer
-    http_method_names = ['get']
 
 
-class CounterViewSet(ModelViewSet):
+class CounterViewSet(ListAPIView):
     queryset = models.Counter.objects.all()
     serializer_class = serializers.CounterSerializer
-    http_method_names = ['get']
 
 
-class SplendorViewSet(ModelViewSet):
+class SplendorViewSet(ListAPIView):
     queryset = models.Splendor.objects.all()
     serializer_class = serializers.SplendorSerializer
-    http_method_names = ['get']
 
 
-class FeatureViewSet(ModelViewSet):
+class FeatureViewSet(ListAPIView):
     queryset = models.Feature.objects.all()
     serializer_class = serializers.FeatureSerializer
-    http_method_names = ['get']
 
 
-class GalleryViewSet(ModelViewSet):
+class GalleryViewSet(ListAPIView):
     queryset = models.Gallery.objects.all()
     serializer_class = serializers.GallerySerializer
-    http_method_names = ['get']
 
 
 class EnquiryViewSet(ModelViewSet):

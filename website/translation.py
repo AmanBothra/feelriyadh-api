@@ -25,7 +25,7 @@ class FeatureTranslationOptions(TranslationOptions):
 
 
 class AmenitiesTranslationOptions(TranslationOptions):
-    fields = ('title', 'description')
+    fields = ['title', 'description']
 
 
 translator.register(models.Banner, BannerTranslationOptions)
