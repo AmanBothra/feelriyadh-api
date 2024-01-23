@@ -28,9 +28,19 @@ class AmenitiesTranslationOptions(TranslationOptions):
     fields = ['title', 'description']
 
 
+class ChaletTranslationOptions(TranslationOptions):
+    fields = ('name',)
+
+
+class BaseChaletTranslationOptions(TranslationOptions):
+    fields = ['description', 'terms_and_conditions']
+
+
 translator.register(models.Banner, BannerTranslationOptions)
 translator.register(models.About, AboutTranslationOptions)
 translator.register(models.Counter, CounterTranslationOptions)
 translator.register(models.Splendor, SplendorTranslationOptions)
 translator.register(models.Feature, FeatureTranslationOptions)
 translator.register(models.Amenities, AmenitiesTranslationOptions)
+translator.register(models.BaseChalet, BaseChaletTranslationOptions)
+translator.register(models.Chalet, ChaletTranslationOptions)

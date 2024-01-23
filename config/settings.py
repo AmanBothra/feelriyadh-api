@@ -66,7 +66,6 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
 ]
 
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -118,7 +117,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-
 # --------------------------- STATIC & MEDIA Configuration -----------------------
 
 STATIC_URL = "/static/"
@@ -158,7 +156,7 @@ JAZZMIN_SETTINGS = {
     # Whether to display the side menu
     "show_sidebar": True,
     # Whether to aut expand the menu
-    "navigation_expanded": False,
+    "navigation_expanded": True,
     "icons": {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
@@ -173,8 +171,6 @@ JAZZMIN_SETTINGS = {
     # Use modals instead of popups
     "related_modal_active": False,
 }
-
-
 
 # --------------------------- THIRD-PARTY APP Configuration -----------------------
 

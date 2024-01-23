@@ -1,5 +1,6 @@
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListAPIView
+from rest_framework.viewsets import ModelViewSet
+
 from . import models
 from . import serializers
 
@@ -38,3 +39,13 @@ class EnquiryViewSet(ModelViewSet):
     queryset = models.Enquiry.objects.all()
     serializer_class = serializers.EnquirySerializer
     http_method_names = ['post']
+
+
+class AmenitiesViewSet(ListAPIView):
+    queryset = models.Amenities.objects.all()
+    serializer_class = serializers.AmenitiesSerializer
+
+
+class ChaletViewSet(ListAPIView):
+    queryset = models.Chalet.objects.all()
+    serializer_class = serializers.ChaletSerializer

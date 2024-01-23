@@ -14,5 +14,6 @@ urlpatterns = [
     path("splendor", views.SplendorViewSet.as_view(), name="splendor"),
     path("feature", views.FeatureViewSet.as_view(), name="feature"),
     path("gallery", views.GalleryViewSet.as_view(), name="gallery"),
-
+    path("amenities", views.AmenitiesViewSet.as_view(), name="amenities"),
+    path("chalet", views.ChaletViewSet.as_view(), name="chalet"),
 ]

@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from dj_rest_kit.constants import FileFieldConstants
 from dj_rest_kit.helpers import PathAndRename
 from django.core.exceptions import ValidationError
@@ -114,6 +116,76 @@ class Amenities(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = _("Amenities")
+
+
+class BaseChalet(models.Model):
+    description = HTMLField()
+    terms_and_conditions = HTMLField()
+
+    class Meta:
+        verbose_name = verbose_name_plural = _("Chalet")
+
+
+class Chalet(models.Model):
+    name = models.CharField(max_length=250, unique=True)
+    banner_image = models.ImageField(upload_to=PathAndRename("chalet/banner/"), validators=[
+        FileExtensionValidator(FileFieldConstants.IMAGE_FORMATS)])
+    chalet_image = models.ImageField(upload_to=PathAndRename("chalet/room/"), validators=[
+        FileExtensionValidator(FileFieldConstants.IMAGE_FORMATS)])
+    plugin = models.ForeignKey(
+        BaseChalet, on_delete=models.CASCADE, related_name="chalet_plugins"
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = verbose_name_plural = _("Chalet")
+
+
+class ChaletPrice(models.Model):
+    chalet = models.ForeignKey(Chalet, on_delete=models.CASCADE, related_name='chalet_prices')
+    start_date = models.DateField()
+    end_date = models.DateField()
+    price = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.chalet.name} - {self.start_date} to {self.end_date}"
+
+    class Meta:
+        verbose_name = verbose_name_plural = _("Chalet Price")
+
+
+class ChaletBooking(models.Model):
+    booking_id = models.CharField(max_length=4, null=True, blank=True)
+    chalet = models.ForeignKey(Chalet, on_delete=models.CASCADE, related_name='chalet_booking')
+    booking_date = models.DateField(auto_now_add=True)
+    total_price = models.DecimalField(max_digits=20, decimal_places=2)
+    name = models.CharField(max_length=100, null=True, blank=True)
+    phone_number = models.CharField(max_length=20, null=True, blank=True)
+    email = models.EmailField(max_length=100, null=True, blank=True)
+    special_request = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.chalet.name} - {self.booking_date}"
+
+    class Meta:
+        verbose_name = verbose_name_plural = _("Chalet Booking")
+
+    def save(self, *args, **kwargs):
+        if not self.booking_id:
+            # Generate the next booking ID based on existing bookings for the room
+            last_booking = ChaletBooking.objects.filter(room=self.room).order_by('-booking_id').first()
+
+            if last_booking and last_booking.booking_id:
+                last_booking_id = int(last_booking.booking_id)
+                new_booking_id = str(last_booking_id + 1).zfill(4)
+            else:
+                new_booking_id = "1000"
+
+            self.booking_id = new_booking_id
+
+        super().save(*args, **kwargs)
 
 
 class Enquiry(models.Model):
