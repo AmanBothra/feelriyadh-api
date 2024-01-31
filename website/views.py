@@ -46,6 +46,8 @@ class AmenitiesViewSet(ListAPIView):
     serializer_class = serializers.AmenitiesSerializer
 
 
-class ChaletViewSet(ListAPIView):
+class ChaletViewSet(ModelViewSet):
     queryset = models.Chalet.objects.all()
     serializer_class = serializers.ChaletSerializer
+    http_method_names = ['get']
+

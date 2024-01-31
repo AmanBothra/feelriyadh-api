@@ -5,6 +5,7 @@ from . import views
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register("enquiry", views.EnquiryViewSet, basename="enquiry")
+router.register("chalet", views.ChaletViewSet, basename="chalet"),
 
 urlpatterns = [
     path("", include(router.urls)),
@@ -15,5 +16,4 @@ urlpatterns = [
     path("feature", views.FeatureViewSet.as_view(), name="feature"),
     path("gallery", views.GalleryViewSet.as_view(), name="gallery"),
     path("amenities", views.AmenitiesViewSet.as_view(), name="amenities"),
-    path("chalet", views.ChaletViewSet.as_view(), name="chalet"),
 ]

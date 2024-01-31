@@ -1,5 +1,5 @@
 from django.contrib import admin
-from modeltranslation.admin import TranslationAdmin, TranslationInlineModelAdmin, TranslationStackedInline
+from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 
 from . import models
 
@@ -37,14 +37,15 @@ class AmenitiesHeaderAdmin(admin.ModelAdmin):
     inlines = [AmenitiesInline]
 
 
-class ChaletInline(TranslationStackedInline):
-    model = models.Chalet
-    extra = 1
+class ChaletAdmin(TranslationAdmin):
+    pass
 
 
-class ChaletHeaderAdmin(admin.ModelAdmin):
-    inlines = [ChaletInline]
+class ChaletPriceAdmin(admin.ModelAdmin):
+    list_display = ['chalet', 'start_date', 'end_date', 'price']
 
+class ChaletBookingAdmin(admin.ModelAdmin):
+    list_display = ['booking_id', 'chalet', 'booking_date', 'total_price', 'name', 'phone_number', 'email']
 
 admin.site.register(models.Banner, BannerAdmin)
 admin.site.register(models.About, AboutAdmin)
@@ -54,6 +55,6 @@ admin.site.register(models.Enquiry, EnquiryAdmin)
 admin.site.register(models.Feature, FeatureAdmin)
 admin.site.register(models.Gallery)
 admin.site.register(models.BaseAmenities, AmenitiesHeaderAdmin)
-admin.site.register(models.BaseChalet, ChaletHeaderAdmin)
-admin.site.register(models.ChaletPrice)
-admin.site.register(models.ChaletBooking)
+admin.site.register(models.Chalet, ChaletAdmin)
+admin.site.register(models.ChaletPrice, ChaletPriceAdmin)
+admin.site.register(models.ChaletBooking, ChaletBookingAdmin)

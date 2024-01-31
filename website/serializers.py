@@ -56,22 +56,25 @@ class AmenitiesSerializer(serializers.ModelSerializer):
 class ChaletPriceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ChaletPrice
-        fields = '__all__'
+        fields = [
+            'chalet', 'banner_image', 'chalet_image', 'start_date', 'end_date', 'price'
+        ]
 
 
 class ChaletSerializer(serializers.ModelSerializer):
-    description = serializers.CharField(source='plugin.description', read_only=True)
-    terms_and_conditions = serializers.CharField(source='plugin.terms_and_conditions', read_only=True)
-    price = ChaletPriceSerializer(many=True, read_only=True)
+    chalet_details = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = models.Chalet
         fields = [
             'id',
             'name',
-            'banner_image',
-            'chalet_image',
             'description',
             'terms_and_conditions',
-            'price'
+            'chalet_details'
         ]
+
+    def get_chalet_details(self, obj):
+        chalet_prices = obj.chalet_prices
+        serializer = ChaletPriceSerializer(chalet_prices, context={'request': self.context['request']})
+        return serializer.data

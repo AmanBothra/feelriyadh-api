@@ -1,4 +1,3 @@
-from datetime import timedelta
 
 from dj_rest_kit.constants import FileFieldConstants
 from dj_rest_kit.helpers import PathAndRename
@@ -118,36 +117,27 @@ class Amenities(models.Model):
         verbose_name = verbose_name_plural = _("Amenities")
 
 
-class BaseChalet(models.Model):
+class Chalet(models.Model):
+    name = models.CharField(max_length=250, unique=True)
     description = HTMLField()
     terms_and_conditions = HTMLField()
 
     class Meta:
         verbose_name = verbose_name_plural = _("Chalet")
 
+    def __str__(self):
+        return self.name
 
-class Chalet(models.Model):
-    name = models.CharField(max_length=250, unique=True)
+
+class ChaletPrice(models.Model):
+    chalet = models.OneToOneField(Chalet, on_delete=models.CASCADE, related_name='chalet_prices')
     banner_image = models.ImageField(upload_to=PathAndRename("chalet/banner/"), validators=[
         FileExtensionValidator(FileFieldConstants.IMAGE_FORMATS)])
     chalet_image = models.ImageField(upload_to=PathAndRename("chalet/room/"), validators=[
         FileExtensionValidator(FileFieldConstants.IMAGE_FORMATS)])
-    plugin = models.ForeignKey(
-        BaseChalet, on_delete=models.CASCADE, related_name="chalet_plugins"
-    )
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = verbose_name_plural = _("Chalet")
-
-
-class ChaletPrice(models.Model):
-    chalet = models.ForeignKey(Chalet, on_delete=models.CASCADE, related_name='chalet_prices')
     start_date = models.DateField()
     end_date = models.DateField()
-    price = models.IntegerField()
+    price = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
 
     def __str__(self):
         return f"{self.chalet.name} - {self.start_date} to {self.end_date}"
@@ -157,7 +147,7 @@ class ChaletPrice(models.Model):
 
 
 class ChaletBooking(models.Model):
-    booking_id = models.CharField(max_length=4, null=True, blank=True)
+    booking_id = models.CharField(max_length=4, editable=False, unique=True)
     chalet = models.ForeignKey(Chalet, on_delete=models.CASCADE, related_name='chalet_booking')
     booking_date = models.DateField(auto_now_add=True)
     total_price = models.DecimalField(max_digits=20, decimal_places=2)
@@ -175,13 +165,13 @@ class ChaletBooking(models.Model):
     def save(self, *args, **kwargs):
         if not self.booking_id:
             # Generate the next booking ID based on existing bookings for the room
-            last_booking = ChaletBooking.objects.filter(room=self.room).order_by('-booking_id').first()
+            last_booking = ChaletBooking.objects.all().order_by('-booking_id').first()
 
             if last_booking and last_booking.booking_id:
                 last_booking_id = int(last_booking.booking_id)
                 new_booking_id = str(last_booking_id + 1).zfill(4)
             else:
-                new_booking_id = "1000"
+                new_booking_id = "1001"
 
             self.booking_id = new_booking_id
 
