@@ -47,10 +47,28 @@ class EnquirySerializer(serializers.ModelSerializer):
 
 class AmenitiesSerializer(serializers.ModelSerializer):
     amenities_image = serializers.ImageField(source='plugin.image', read_only=True)
+    title_en = serializers.SerializerMethodField()
+    title_ar = serializers.SerializerMethodField()
+    description_en = serializers.SerializerMethodField()
+    description_ar = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Amenities
-        fields = ['id', 'icon', 'title', 'description', 'amenities_image']
+        fields = [
+            'id', 'icon', 'amenities_image', 'title_en', 'title_ar', 'description_en', 'description_ar'
+        ]
+
+    def get_title_en(self, obj):
+        return getattr(obj, 'title_en', obj.title)
+
+    def get_title_ar(self, obj):
+        return getattr(obj, 'title_ar', obj.title)
+
+    def get_description_en(self, obj):
+        return getattr(obj, 'description_en', obj.description)
+
+    def get_description_ar(self, obj):
+        return getattr(obj, 'description_ar', obj.description)
 
 
 class ChaletPriceSerializer(serializers.ModelSerializer):
@@ -62,19 +80,46 @@ class ChaletPriceSerializer(serializers.ModelSerializer):
 
 
 class ChaletSerializer(serializers.ModelSerializer):
+    name_en = serializers.SerializerMethodField()
+    name_ar = serializers.SerializerMethodField()
+    description_en = serializers.SerializerMethodField()
+    description_ar = serializers.SerializerMethodField()
+    terms_and_conditions_en = serializers.SerializerMethodField()
+    terms_and_conditions_ar = serializers.SerializerMethodField()
     chalet_details = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = models.Chalet
         fields = [
-            'id',
-            'name',
-            'description',
-            'terms_and_conditions',
-            'chalet_details'
+            'id', 'name_en', 'name_ar', 'description_en', 'description_ar', 'terms_and_conditions_en',
+            'terms_and_conditions_ar', 'chalet_details'
         ]
+
+    def get_name_en(self, obj):
+        return getattr(obj, 'name_en', obj.name)
+
+    def get_name_ar(self, obj):
+        return getattr(obj, 'name_ar', obj.name)
+
+    def get_description_en(self, obj):
+        return getattr(obj, 'description_en', obj.description)
+
+    def get_description_ar(self, obj):
+        return getattr(obj, 'description_ar', obj.description)
+
+    def get_terms_and_conditions_en(self, obj):
+        return getattr(obj, 'terms_and_conditions_en', obj.terms_and_conditions)
+
+    def get_terms_and_conditions_ar(self, obj):
+        return getattr(obj, 'terms_and_conditions_ar', obj.terms_and_conditions)
 
     def get_chalet_details(self, obj):
         chalet_prices = obj.chalet_prices
         serializer = ChaletPriceSerializer(chalet_prices, context={'request': self.context['request']})
         return serializer.data
+
+
+class ChaletBookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ChaletBooking
+        fields = '__all__'

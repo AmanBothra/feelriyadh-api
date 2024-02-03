@@ -6,6 +6,7 @@ from . import views
 router = routers.DefaultRouter(trailing_slash=False)
 router.register("enquiry", views.EnquiryViewSet, basename="enquiry")
 router.register("chalet", views.ChaletViewSet, basename="chalet"),
+router.register("chalet-booking", views.ChaletBookingViewSet, basename="chalet-booking"),
 
 urlpatterns = [
     path("", include(router.urls)),

@@ -21,7 +21,7 @@ class SplendorTranslationOptions(TranslationOptions):
 
 
 class FeatureTranslationOptions(TranslationOptions):
-    fields = ('title',)
+    fields = ('title', 'description')
 
 
 class AmenitiesTranslationOptions(TranslationOptions):

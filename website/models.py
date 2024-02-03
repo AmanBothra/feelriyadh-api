@@ -73,6 +73,7 @@ class Feature(models.Model):
     icon = models.ImageField(upload_to=PathAndRename("feature/"), validators=[
         FileExtensionValidator(FileFieldConstants.IMAGE_FORMATS)])
     title = models.CharField(max_length=250, unique=True)
+    description = HTMLField(default="")
 
     def __str__(self):
         return self.title

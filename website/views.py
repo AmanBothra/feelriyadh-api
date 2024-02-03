@@ -51,3 +51,8 @@ class ChaletViewSet(ModelViewSet):
     serializer_class = serializers.ChaletSerializer
     http_method_names = ['get']
 
+
+class ChaletBookingViewSet(ModelViewSet):
+    queryset = models.ChaletBooking.objects.all()
+    serializer_class = serializers.ChaletBookingSerializer
+    http_method_names = ['post']
