@@ -150,7 +150,7 @@ class ChaletPrice(models.Model):
 class ChaletBooking(models.Model):
     booking_id = models.CharField(max_length=4, editable=False, unique=True)
     chalet = models.ForeignKey(Chalet, on_delete=models.CASCADE, related_name='chalet_booking')
-    booking_date = models.DateField(auto_now_add=True)
+    booking_date = models.DateField()
     total_price = models.DecimalField(max_digits=20, decimal_places=2)
     name = models.CharField(max_length=100, null=True, blank=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True)

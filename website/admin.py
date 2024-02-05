@@ -44,8 +44,10 @@ class ChaletAdmin(TranslationAdmin):
 class ChaletPriceAdmin(admin.ModelAdmin):
     list_display = ['chalet', 'start_date', 'end_date', 'price']
 
+
 class ChaletBookingAdmin(admin.ModelAdmin):
     list_display = ['booking_id', 'chalet', 'booking_date', 'total_price', 'name', 'phone_number', 'email']
+
 
 admin.site.register(models.Banner, BannerAdmin)
 admin.site.register(models.About, AboutAdmin)
