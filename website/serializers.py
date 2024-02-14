@@ -71,6 +71,14 @@ class AmenitiesSerializer(serializers.ModelSerializer):
         return getattr(obj, 'description_ar', obj.description)
 
 
+class ChaletNewPriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ChaletNewPrice
+        fields = [
+            'date', 'price'
+        ]
+
+
 class ChaletPriceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ChaletPrice
@@ -87,12 +95,13 @@ class ChaletSerializer(serializers.ModelSerializer):
     terms_and_conditions_en = serializers.SerializerMethodField()
     terms_and_conditions_ar = serializers.SerializerMethodField()
     chalet_details = serializers.SerializerMethodField(read_only=True)
+    new_price = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Chalet
         fields = [
             'id', 'name_en', 'name_ar', 'description_en', 'description_ar', 'terms_and_conditions_en',
-            'terms_and_conditions_ar', 'chalet_details'
+            'terms_and_conditions_ar', 'chalet_details', 'new_price'
         ]
 
     def get_name_en(self, obj):
@@ -116,6 +125,11 @@ class ChaletSerializer(serializers.ModelSerializer):
     def get_chalet_details(self, obj):
         chalet_prices = obj.chalet_prices
         serializer = ChaletPriceSerializer(chalet_prices, context={'request': self.context['request']})
+        return serializer.data
+
+    def get_new_price(self, obj):
+        chalet_new_prices = obj.chalet_new_prices.all()
+        serializer = ChaletNewPriceSerializer(chalet_new_prices, many=True)
         return serializer.data
 
 

@@ -147,6 +147,18 @@ class ChaletPrice(models.Model):
         verbose_name = verbose_name_plural = _("Chalet Price")
 
 
+class ChaletNewPrice(models.Model):
+    chalet = models.ForeignKey(Chalet, on_delete=models.CASCADE, related_name='chalet_new_prices')
+    date = models.DateField()
+    price = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
+
+    def __str__(self):
+        return f"{self.chalet.name} - {self.date} to {self.price}"
+
+    class Meta:
+        verbose_name = verbose_name_plural = _("Chalet New Price")
+
+
 class ChaletBooking(models.Model):
     booking_id = models.CharField(max_length=4, editable=False, unique=True)
     chalet = models.ForeignKey(Chalet, on_delete=models.CASCADE, related_name='chalet_booking')
@@ -155,6 +167,7 @@ class ChaletBooking(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     email = models.EmailField(max_length=100, null=True, blank=True)
+    birthday = models.DateField(null=True, blank=True)
     special_request = models.TextField(null=True, blank=True)
 
     def __str__(self):
