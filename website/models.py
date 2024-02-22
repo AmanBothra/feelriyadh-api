@@ -1,4 +1,3 @@
-
 from dj_rest_kit.constants import FileFieldConstants
 from dj_rest_kit.helpers import PathAndRename
 from django.core.exceptions import ValidationError
@@ -157,6 +156,18 @@ class ChaletNewPrice(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = _("Chalet New Price")
+
+
+class ChaletHoliday(models.Model):
+    chalet = models.ForeignKey(Chalet, on_delete=models.CASCADE, related_name='chalet_holidays')
+    date = models.DateField()
+    price = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
+
+    def __str__(self):
+        return f"{self.chalet.name} - {self.date} to {self.price}"
+
+    class Meta:
+        verbose_name = verbose_name_plural = _("Chalet Holiday")
 
 
 class ChaletBooking(models.Model):

@@ -78,6 +78,12 @@ class ChaletNewPriceSerializer(serializers.ModelSerializer):
             'date', 'price'
         ]
 
+class ChaletHolidaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ChaletHoliday
+        fields = [
+            'date', 'price'
+        ]
 
 class ChaletPriceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -96,12 +102,13 @@ class ChaletSerializer(serializers.ModelSerializer):
     terms_and_conditions_ar = serializers.SerializerMethodField()
     chalet_details = serializers.SerializerMethodField(read_only=True)
     new_price = serializers.SerializerMethodField()
+    holiday = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Chalet
         fields = [
             'id', 'name_en', 'name_ar', 'description_en', 'description_ar', 'terms_and_conditions_en',
-            'terms_and_conditions_ar', 'chalet_details', 'new_price'
+            'terms_and_conditions_ar', 'chalet_details', 'new_price', 'holiday'
         ]
 
     def get_name_en(self, obj):
@@ -130,6 +137,11 @@ class ChaletSerializer(serializers.ModelSerializer):
     def get_new_price(self, obj):
         chalet_new_prices = obj.chalet_new_prices.all()
         serializer = ChaletNewPriceSerializer(chalet_new_prices, many=True)
+        return serializer.data
+
+    def get_holiday(self, obj):
+        holiday = obj.chalet_holidays.all()
+        serializer = ChaletHolidaySerializer(holiday, many=True)
         return serializer.data
 
 
