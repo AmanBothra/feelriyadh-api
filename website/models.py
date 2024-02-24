@@ -72,7 +72,7 @@ class Feature(models.Model):
     icon = models.ImageField(upload_to=PathAndRename("feature/"), validators=[
         FileExtensionValidator(FileFieldConstants.IMAGE_FORMATS)])
     title = models.CharField(max_length=250, unique=True)
-    description = HTMLField(default="")
+    description = HTMLField(default="", null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -120,6 +120,10 @@ class Amenities(models.Model):
 class Chalet(models.Model):
     name = models.CharField(max_length=250, unique=True)
     description = HTMLField()
+    banner_image = models.ImageField(upload_to=PathAndRename("chalet/banner/"), validators=[
+        FileExtensionValidator(FileFieldConstants.IMAGE_FORMATS)])
+    chalet_image = models.ImageField(upload_to=PathAndRename("chalet/room/"), validators=[
+        FileExtensionValidator(FileFieldConstants.IMAGE_FORMATS)])
     terms_and_conditions = HTMLField()
 
     class Meta:
@@ -131,10 +135,6 @@ class Chalet(models.Model):
 
 class ChaletPrice(models.Model):
     chalet = models.OneToOneField(Chalet, on_delete=models.CASCADE, related_name='chalet_prices')
-    banner_image = models.ImageField(upload_to=PathAndRename("chalet/banner/"), validators=[
-        FileExtensionValidator(FileFieldConstants.IMAGE_FORMATS)])
-    chalet_image = models.ImageField(upload_to=PathAndRename("chalet/room/"), validators=[
-        FileExtensionValidator(FileFieldConstants.IMAGE_FORMATS)])
     start_date = models.DateField()
     end_date = models.DateField()
     price = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
@@ -158,16 +158,12 @@ class ChaletNewPrice(models.Model):
         verbose_name = verbose_name_plural = _("Chalet New Price")
 
 
-class ChaletHoliday(models.Model):
-    chalet = models.ForeignKey(Chalet, on_delete=models.CASCADE, related_name='chalet_holidays')
-    date = models.DateField()
-    price = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
+class ChaletFullBooking(models.Model):
+    full_date = models.DateField(unique=True)
+    chalet = models.ForeignKey(Chalet, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.chalet.name} - {self.date} to {self.price}"
-
-    class Meta:
-        verbose_name = verbose_name_plural = _("Chalet Holiday")
+        return f"Full Bookings for {self.full_date} - {self.chalet}"
 
 
 class ChaletBooking(models.Model):
@@ -200,7 +196,12 @@ class ChaletBooking(models.Model):
 
             self.booking_id = new_booking_id
 
-        super().save(*args, **kwargs)
+        super(ChaletBooking, self).save(*args, **kwargs)
+
+        bookings_count = ChaletBooking.objects.filter(chalet=self.chalet, booking_date=self.booking_date).count()
+        if bookings_count == 4:
+            # Create a new ChaletFullBooking entry for this date and chalet
+            ChaletFullBooking.objects.create(full_date=self.booking_date, chalet=self.chalet)
 
 
 class Enquiry(models.Model):

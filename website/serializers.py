@@ -78,19 +78,19 @@ class ChaletNewPriceSerializer(serializers.ModelSerializer):
             'date', 'price'
         ]
 
-class ChaletHolidaySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.ChaletHoliday
-        fields = [
-            'date', 'price'
-        ]
 
 class ChaletPriceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ChaletPrice
         fields = [
-            'chalet', 'banner_image', 'chalet_image', 'start_date', 'end_date', 'price'
+            'chalet', 'start_date', 'end_date', 'price'
         ]
+
+
+class ChaletFullBookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ChaletFullBooking
+        fields = ['full_date']
 
 
 class ChaletSerializer(serializers.ModelSerializer):
@@ -102,13 +102,13 @@ class ChaletSerializer(serializers.ModelSerializer):
     terms_and_conditions_ar = serializers.SerializerMethodField()
     chalet_details = serializers.SerializerMethodField(read_only=True)
     new_price = serializers.SerializerMethodField()
-    holiday = serializers.SerializerMethodField()
+    booked_dates = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Chalet
         fields = [
             'id', 'name_en', 'name_ar', 'description_en', 'description_ar', 'terms_and_conditions_en',
-            'terms_and_conditions_ar', 'chalet_details', 'new_price', 'holiday'
+            'terms_and_conditions_ar', 'chalet_details', 'banner_image', 'chalet_image', 'new_price', 'booked_dates'
         ]
 
     def get_name_en(self, obj):
@@ -131,7 +131,7 @@ class ChaletSerializer(serializers.ModelSerializer):
 
     def get_chalet_details(self, obj):
         chalet_prices = obj.chalet_prices
-        serializer = ChaletPriceSerializer(chalet_prices, context={'request': self.context['request']})
+        serializer = ChaletPriceSerializer(chalet_prices)
         return serializer.data
 
     def get_new_price(self, obj):
@@ -139,10 +139,10 @@ class ChaletSerializer(serializers.ModelSerializer):
         serializer = ChaletNewPriceSerializer(chalet_new_prices, many=True)
         return serializer.data
 
-    def get_holiday(self, obj):
-        holiday = obj.chalet_holidays.all()
-        serializer = ChaletHolidaySerializer(holiday, many=True)
-        return serializer.data
+    def get_booked_dates(self, obj):
+        chalet_full_bookings = models.ChaletFullBooking.objects.filter(chalet=obj)
+        booked_dates = list(chalet_full_bookings.values_list('full_date', flat=True))
+        return booked_dates
 
 
 class ChaletBookingSerializer(serializers.ModelSerializer):
