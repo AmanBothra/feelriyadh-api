@@ -1,8 +1,10 @@
 from dj_rest_kit.constants import FileFieldConstants
 from dj_rest_kit.helpers import PathAndRename
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 
@@ -134,7 +136,7 @@ class Chalet(models.Model):
 
 
 class ChaletPrice(models.Model):
-    chalet = models.OneToOneField(Chalet, on_delete=models.CASCADE, related_name='chalet_prices')
+    chalet = models.ForeignKey(Chalet, on_delete=models.CASCADE, related_name='chalet_prices')
     start_date = models.DateField()
     end_date = models.DateField()
     price = models.DecimalField(max_digits=20, decimal_places=2, default=0.00)
@@ -195,6 +197,21 @@ class ChaletBooking(models.Model):
                 new_booking_id = "1001"
 
             self.booking_id = new_booking_id
+
+            subject = _('New booking request')
+            data = {
+                'booking_id': self.booking_id,
+                'name': self.name,
+                'email': self.email,
+                'phone_number': self.phone_number,
+                'booking_date': self.booking_date,
+                'price': self.total_price,
+            }
+            html_message = render_to_string('booking_email_template.html', data)
+            message = "New Booking Request"
+            email = EmailMultiAlternatives(subject, message, 'feelriyadh@gmail.com', [self.email])
+            email.attach_alternative(html_message, "text/html")
+            email.send()
 
         super(ChaletBooking, self).save(*args, **kwargs)
 
