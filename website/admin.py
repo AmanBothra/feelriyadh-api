@@ -2,7 +2,7 @@ from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 
 from . import models
-
+from import_export.admin import ExportActionMixin
 
 class BannerAdmin(TranslationAdmin):
     pass
@@ -45,7 +45,7 @@ class ChaletPriceAdmin(admin.ModelAdmin):
     list_display = ['chalet', 'start_date', 'end_date', 'price']
 
 
-class ChaletBookingAdmin(admin.ModelAdmin):
+class ChaletBookingAdmin(ExportActionMixin, admin.ModelAdmin):
     list_display = ['booking_id', 'chalet', 'booking_date', 'total_price', 'name', 'phone_number', 'email']
 
 

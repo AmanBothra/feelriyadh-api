@@ -130,8 +130,8 @@ class ChaletSerializer(serializers.ModelSerializer):
         return getattr(obj, 'terms_and_conditions_ar', obj.terms_and_conditions)
 
     def get_chalet_details(self, obj):
-        chalet_prices = obj.chalet_prices
-        serializer = ChaletPriceSerializer(chalet_prices)
+        chalet_prices = obj.chalet_prices.all()
+        serializer = ChaletPriceSerializer(chalet_prices, many=True)
         return serializer.data
 
     def get_new_price(self, obj):
