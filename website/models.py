@@ -209,7 +209,7 @@ class ChaletBooking(models.Model):
             }
             html_message = render_to_string('booking_email_template.html', data)
             message = "New Booking Request"
-            email = EmailMultiAlternatives(subject, message, 'feelriyadh@gmail.com', [self.email])
+            email = EmailMultiAlternatives(subject, message, 'feelriyadh@gmail.com', ["feelriyadh@gmail.com"])
             email.attach_alternative(html_message, "text/html")
             email.send()
 
