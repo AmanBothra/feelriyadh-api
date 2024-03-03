@@ -30,6 +30,11 @@ class FeatureViewSet(ListAPIView):
     serializer_class = serializers.FeatureSerializer
 
 
+class FeatureImageViewSet(ListAPIView):
+    queryset = models.FeatureImage.objects.all()
+    serializer_class = serializers.FeatureImageSerializer
+
+
 class GalleryViewSet(ListAPIView):
     queryset = models.Gallery.objects.all()
     serializer_class = serializers.GallerySerializer

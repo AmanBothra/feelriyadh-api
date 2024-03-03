@@ -149,3 +149,9 @@ class ChaletBookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ChaletBooking
         fields = '__all__'
+
+
+class FeatureImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.FeatureImage
+        fields = '__all__'

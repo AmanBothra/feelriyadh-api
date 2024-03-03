@@ -15,6 +15,7 @@ urlpatterns = [
     path("counter", views.CounterViewSet.as_view(), name="counter"),
     path("splendor", views.SplendorViewSet.as_view(), name="splendor"),
     path("feature", views.FeatureViewSet.as_view(), name="feature"),
+    path("feature-image", views.FeatureImageViewSet.as_view(), name="feature-image"),
     path("gallery", views.GalleryViewSet.as_view(), name="gallery"),
     path("amenities", views.AmenitiesViewSet.as_view(), name="amenities"),
 ]

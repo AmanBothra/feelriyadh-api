@@ -83,6 +83,17 @@ class Feature(models.Model):
         verbose_name = verbose_name_plural = _("Feature")
 
 
+class FeatureImage(models.Model):
+    image = models.ImageField(upload_to=PathAndRename("feature/"), validators=[
+        FileExtensionValidator(FileFieldConstants.IMAGE_FORMATS)])
+
+    def __str__(self):
+        return "Feature Image"
+
+    class Meta:
+        verbose_name = verbose_name_plural = _("Feature Image")
+
+
 class Splendor(models.Model):
     image = models.ImageField(upload_to=PathAndRename("splendor/"), validators=[
         FileExtensionValidator(FileFieldConstants.IMAGE_FORMATS)])
