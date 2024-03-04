@@ -222,7 +222,7 @@ class ChaletBooking(models.Model):
             message = "New Booking Request"
             email = EmailMultiAlternatives(subject, message, 'feelriyadh@gmail.com', ["feelriyadh@gmail.com"])
             email.attach_alternative(html_message, "text/html")
-            # email.send()
+            email.send()
 
         super(ChaletBooking, self).save(*args, **kwargs)
 
