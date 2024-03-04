@@ -227,7 +227,7 @@ class ChaletBooking(models.Model):
         super(ChaletBooking, self).save(*args, **kwargs)
 
         bookings_count = ChaletBooking.objects.filter(chalet=self.chalet, booking_date=self.booking_date).count()
-        if bookings_count == 4:
+        if bookings_count > 4:
             # Create a new ChaletFullBooking entry for this date and chalet
             ChaletFullBooking.objects.create(full_date=self.booking_date, chalet=self.chalet)
 
