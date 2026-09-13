@@ -9,6 +9,7 @@ const withOptimizedImages = require('next-optimized-images');
 
 module.exports = withBundleAnalyzer(
   withOptimizedImages({
+    optimizeImages: false,
     poweredByHeader: false,
     trailingSlash: true,
     basePath: '',
