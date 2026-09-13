@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('@fontsource/jost/400');
+@import url('@fontsource/jost/500');
+@import url('@fontsource/jost/600');
+@import url('@fontsource/jost/700');
+@import url('@fontsource/readex-pro/400');
+@import url('@fontsource/readex-pro/500');
+@import url('@fontsource/readex-pro/600');
+@import url('@fontsource/readex-pro/700');
+
+@import url('react-datepicker/dist/react-datepicker.css');
+@import url('./datepicker.css');
+body {
+  @apply !font-jost rtl:!font-readex;
+}
+
+.menu-enter {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.menu-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease;
+}
+
+.menu-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.menu-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease;
+}
