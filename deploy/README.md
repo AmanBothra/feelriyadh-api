@@ -64,3 +64,32 @@ sudo systemctl reload nginx
 sudo journalctl -u feelriyadh-api -n 100 --no-pager
 sudo tail -n 100 /var/log/nginx/error.log
 ```
+
+## 6. Frontend with PM2 and Nginx
+
+These commands assume the Next.js app lives in `/home/feelriyadh-api/frontend` and runs on port `3000`.
+
+```bash
+cd /home/feelriyadh-api/frontend
+yarn install --frozen-lockfile
+yarn build
+pm2 start yarn --name feelriyadh-frontend -- start
+pm2 save
+```
+
+Enable the frontend Nginx site:
+
+```bash
+sudo cp /home/feelriyadh-api/deploy/nginx-feelriyadh-frontend.conf /etc/nginx/sites-available/feelriyadh-frontend
+sudo ln -s /etc/nginx/sites-available/feelriyadh-frontend /etc/nginx/sites-enabled/feelriyadh-frontend
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+Add HTTPS:
+
+```bash
+sudo certbot --nginx -d feelriyadh.com -d www.feelriyadh.com
+sudo nginx -t
+sudo systemctl reload nginx
+```
