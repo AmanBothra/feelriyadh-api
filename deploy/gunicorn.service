@@ -1,0 +1,21 @@
+[Unit]
+Description=Feel Riyadh Django API Gunicorn service
+After=network.target
+
+[Service]
+User=feelriyadh-api
+Group=www-data
+WorkingDirectory=/home/feelriyadh-api
+Environment=PYTHONUNBUFFERED=1
+RuntimeDirectory=feelriyadh-api
+RuntimeDirectoryMode=0755
+ExecStart=/home/feelriyadh-api/myenv/bin/gunicorn \
+          --workers 3 \
+          --bind unix:/run/feelriyadh-api/gunicorn.sock \
+          --umask 007 \
+          config.wsgi:application
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
