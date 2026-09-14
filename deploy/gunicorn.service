@@ -3,7 +3,7 @@ Description=Feel Riyadh Django API Gunicorn service
 After=network.target
 
 [Service]
-User=feelriyadh-api
+User=root
 Group=www-data
 WorkingDirectory=/home/feelriyadh-api
 Environment=PYTHONUNBUFFERED=1
