@@ -289,7 +289,6 @@ db_schema.pdf
 .sqlite3
 
 assets/
-migrations/
 
 celerybeat-schedule.bak
 celerybeat-schedule.dat
