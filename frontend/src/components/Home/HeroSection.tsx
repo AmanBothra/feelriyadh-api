@@ -11,6 +11,11 @@ import { useTranslation } from '~/i18n/TranslationProvider';
 export const HeroSection = ({ data }) => {
   const controls = useAnimation();
   const { locale } = useTranslation();
+  const [firstArabicTitleWord, ...remainingArabicTitleWords] = (
+    data?.[0]?.title_ar ?? ''
+  )
+    .trim()
+    .split(/\s+/);
 
   const parallax = () => {
     const scrollPosition: number = window.scrollY;
@@ -58,11 +63,20 @@ export const HeroSection = ({ data }) => {
           >
             <h1
               className='text-white uppercase font-medium relative z-10 flex flex-col last-word'
-              dangerouslySetInnerHTML={{
-                __html:
-                  locale == 'en' ? data?.[0]?.title_en : data?.[0]?.title_ar,
-              }}
-            ></h1>
+            >
+              {locale == 'en' ? (
+                <span
+                  dangerouslySetInnerHTML={{ __html: data?.[0]?.title_en }}
+                />
+              ) : (
+                <>
+                  <span>{firstArabicTitleWord}</span>
+                  {remainingArabicTitleWords.length > 0 && (
+                    <span>{remainingArabicTitleWords.join(' ')}</span>
+                  )}
+                </>
+              )}
+            </h1>
           </motion.div>
         </div>
       </motion.div>
